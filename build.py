@@ -48,11 +48,13 @@ compress_source(
         'src/glkote/glkapi.js',
         ])
 
+# modified to include electrows (wwlib - August 2020)
 compress_source(
     'lib/elkote.min.js', [
         'src/glkote/glkote.js',
         'src/glkote/electrofs.js',
         'src/glkote/glkapi.js',
+        'src/glkote/electrows.js',
         ])
 
 compress_source(

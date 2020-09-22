@@ -41,6 +41,7 @@
  * For full documentation, see the docs.html file in this package.
  */
 
+// Note: Electrows is defined globally in lectrote's play.html
 
 /* Put everything inside the GlkOte namespace. */
 var GlkOte = function() {
@@ -127,11 +128,37 @@ var recording_context = {};
 */
 var image_cache = {};
 
+let electrowsEmitter;
+const electrowsOnSubmitHandler = (data) => {
+  console.log(`GlkOte: electrowsOnSubmitHandler:`, data);
+
+  const win = windowdic[last_known_focus];
+  submit_line_input(win, data.input, null);
+}
+
+const electrowsOnUpdate = (data) => {
+  try {
+    Electrows.onUpdate(data);
+  } catch (ex) {
+    console.log(`GlkOte: electrowsOnUpdate: error updating Electrows`, ex);
+  }
+}
+
 /* This function becomes GlkOte.init(). The document calls this to begin
    the game. The simplest way to do this is to give the <body> tag an
    onLoad="GlkOte.init();" attribute.
 */
 function glkote_init(iface) {
+  // Electrows
+  console.log(`GlkOte: glkote_init:`);
+  try {
+    console.log(`GlkOte: glkote_init: initializing Electrows:`);
+    electrowsEmitter = Electrows.init();
+    electrowsEmitter.on('submit', electrowsOnSubmitHandler);
+  } catch (ex) {
+    console.log(`GlkOte: glkote_init: error initing Electrows`, ex);
+  }
+
   if (!iface && window.Game)
     iface = window.Game;
   if (!iface) {
@@ -556,6 +583,8 @@ function create_resize_sensors() {
    construct a new display state for the user.
 */
 function glkote_update(arg) {
+  // console.log(`GlkOte: update: arg:`, arg);
+  electrowsOnUpdate(arg);
   hide_loading();
 
   /* This field is *only* for the autorestore case, and only on the very
@@ -2036,6 +2065,7 @@ function inspect_shallow(res) {
    handlers.)
 */
 function submit_line_input(win, val, termkey) {
+  // console.log(`GlkOte: submit_line_input:`, win, val, termkey);
   var historylast = null;
   if (win.history.length)
     historylast = win.history[win.history.length-1];
@@ -2064,6 +2094,7 @@ function submit_line_input(win, val, termkey) {
    is why most of the invocations pass three arguments instead of four.
 */
 function send_response(type, win, val, val2) {
+  // console.log(`GlkOte: send_response:`, type, win, val, val2);
   if (disabled && type != 'specialresponse')
     return;
 
@@ -2143,6 +2174,7 @@ function send_response(type, win, val, val2) {
     recording_state.timestamp = (new Date().getTime());
   }
 
+  console.log(`GlkOte: send_response: game_interface.accept():`, res);
   game_interface.accept(res);
 }
 
