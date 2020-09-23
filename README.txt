@@ -1,5 +1,22 @@
 Quixe -- a Glulx VM interpreter written in Javascript
 
+* wwlib electrows branch notes
+
+This branch (electrows) implements a simple socket server over which a client can interact with the active story/book. The server code lives in:
+
+src/glkote/electrows.js
+
+... and is intended to be instantiated in a modified version of lectrote (an electron wrapper for quixe).
+
+This feature can be tested by launching lectrote (electrows)
+- https://github.com/wwlib/lectrote (electrows branch)
+
+... and connecting with this cli-style socket client:
+- https://github.com/wwlib/lectrote-socket-client
+
+
+
+
 Quixe Library: version 2.1.7.
 Designed by Andrew Plotkin <erkyrath@eblong.com>.
 (Storage and heap-management code contributed by Iain Merrick.)
